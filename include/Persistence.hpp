@@ -13,7 +13,7 @@ namespace Haliotis {
   class Game;
 }
 #else
-#include "Board.hpp"
+#include "Board2D.hpp"
 #endif
 
 #include "Settings.hpp"
