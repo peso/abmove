@@ -1175,6 +1175,7 @@ public:
   ~GameTreeNode();
   GameTreeNode* FindNode(Move move);
   GameTreeNode* GetNode(Move move);
+  GameTreeNode* FindNextNode(Move move);
   GameTreeNode* GetNextNode(Move move);
   static void RemoveNode(GameTreeNode*& nodePtr);
   Board2D::Move UndoMove() const;
