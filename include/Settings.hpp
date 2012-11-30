@@ -1,6 +1,7 @@
 #ifndef __SETTINGS_HPP__
 #define __SETTINGS_HPP__
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 #include <map>

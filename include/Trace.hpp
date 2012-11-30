@@ -14,6 +14,7 @@ of TRACE_FILE
 
 #include "abmove.h"
 
+#include <ctime>
 #include <fstream>
 #include <string>
 #include <sstream>
