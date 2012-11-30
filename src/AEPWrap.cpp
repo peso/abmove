@@ -59,7 +59,7 @@ string to_aep(const Board2D::Move& m) {
     cmd_QUIT,
     cmd_size
   };
-  static char* cmdName[cmd_size] = {
+  static const char* cmdName[cmd_size] = {
     "",
     "aep",
     "debug",
