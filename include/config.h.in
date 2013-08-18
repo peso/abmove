@@ -1,6 +1,9 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+/** Defined if we have Unix selct() available */
+#cmakedefine HAVE_SELECT
+
 /** Defined if we have CppUnit available at compile time */
 #define HAVE_CPPUNIT
 
