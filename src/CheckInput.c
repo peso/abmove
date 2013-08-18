@@ -33,6 +33,8 @@
 #endif
 
 #define xboard (1)
+#define ics (0)
+#define batch_mode (0)
 
 #if defined(AMIGA)
 #  include <proto/dos.h>
@@ -125,6 +127,9 @@ int CheckInput(void)
   return (i);
 }
 #  else
+#include <string.h>
+#include <stdio.h>
+#include <sys/select.h>
 int CheckInput(void)
 {
   fd_set readfds;
@@ -135,8 +140,10 @@ int CheckInput(void)
     return (0);
   if (batch_mode)
     return (0);
+  /*
   if (strchr(cmd_buffer, '\n'))
     return (1);
+  */
   FD_ZERO(&readfds);
   FD_SET(fileno(stdin), &readfds);
 #    if defined(DGT)
