@@ -5,3 +5,5 @@ cmake_install.cmake
 Makefile 
 build
 *.log
+*.cbp
+*.txt.user
