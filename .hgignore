@@ -1,9 +1,11 @@
 syntax: glob
 CMakeCache.txt
 CMakeFiles
-cmake_install.cmake 
-Makefile 
+*.cmake
+Makefile
 build
 *.log
 *.cbp
 *.txt.user
+_CPack_Packages
+abmove-*.deb
