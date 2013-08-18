@@ -1932,7 +1932,7 @@ void WriteAttribute(const string& key, const string& value, ostream& out)
 
 void WriteAttributes(const Settings& att, ostream& out)
 {
-  char* seven_tag_roster[] = {
+  const char* seven_tag_roster[] = {
     "Event","Site","Date","Round","Black","White","Result" };
 
   // Print seven_tag_roster entries first
