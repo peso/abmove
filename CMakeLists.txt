@@ -13,6 +13,6 @@ add_subdirectory (src build)
 # Parameters for building a package
 set(CPACK_PACKAGE_NAME abmove)
 set(CPACK_PACKAGE_VERSION 0.2a)
-set(CPACK_PACKAGE_CONTACT peso@users.sourceforge.net)
+set(CPACK_PACKAGE_CONTACT "Peer Sommerlund <peso@users.sourceforge.net>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "abmove is a library for playing the board game Abalone")
 include(CPack)
