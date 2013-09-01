@@ -20,3 +20,22 @@ include_directories(
 
 add_library (abmove AEPWrap.cpp Board2D.cpp CheckInput.c Persistence.cpp Settings.cpp Trace.cpp TraceManager.cpp)
 
+################################################################
+# Installation
+
+# libabmove.a
+install(TARGETS abmove
+	ARCHIVE DESTINATION lib
+)
+# static header files
+file(GLOB static_headers
+	../include/*.h
+	../include/*.hpp
+)
+install(FILES ${static_headers}
+	DESTINATION include
+)
+# generated header file
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+	DESTINATION include
+)
