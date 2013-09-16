@@ -18,7 +18,31 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_library (abmove AEPWrap.cpp Board2D.cpp CheckInput.c Persistence.cpp Settings.cpp Trace.cpp TraceManager.cpp)
+# static header files
+set(static_headers
+    ../include/abmove.h
+    ../include/AEPWrap.hpp
+    ../include/Board2D.hpp
+    ../include/CheckInput.h
+    ../include/Persistence.hpp
+    ../include/Settings.hpp
+    ../include/TraceFlag.hpp
+    ../include/Trace.hpp
+    ../include/TraceManager.hpp
+)
+# module files
+set(module_files
+    AEPWrap.cpp
+    Board2D.cpp
+    CheckInput.c
+    Persistence.cpp
+    Settings.cpp
+    Trace.cpp
+    TraceManager.cpp
+)
+
+
+add_library (abmove ${static_headers} ${module_files})
 
 ################################################################
 # Installation
@@ -28,10 +52,6 @@ install(TARGETS abmove
 	ARCHIVE DESTINATION lib
 )
 # static header files
-file(GLOB static_headers
-	../include/*.h
-	../include/*.hpp
-)
 install(FILES ${static_headers}
 	DESTINATION include
 )
