@@ -1,0 +1,20 @@
+#### Read more on
+#### http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file
+#### http://www.cmake.org/cmake/help/v2.8.10/cmake.html#command:find_package
+####
+# - Config file for the abmove package
+# It defines the following variables
+#  abmove_INCLUDE_DIRS - include directories for compilation
+#  abmove_LIBRARIES    - libraries to link against
+ 
+# Compute paths
+get_filename_component(abmove_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(abmove_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+ 
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET foo AND NOT FooBar_BINARY_DIR)
+  include("${abmove_CMAKE_DIR}/abmoveTargets.cmake")
+endif()
+ 
+# These are IMPORTED targets created by FooBarTargets.cmake
+set(abmove_LIBRARIES abmove)

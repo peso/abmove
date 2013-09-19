@@ -10,3 +10,4 @@
 [ ] verify that it works
 	install files, and compile example code
 	or other code that uses the library (e.g. paua)
+[ ] Provide cmake configuration file

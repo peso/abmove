@@ -44,18 +44,16 @@ set(module_files
 
 add_library (abmove ${static_headers} ${module_files})
 
+set_target_properties(abmove
+    PROPERTIES PUBLIC_HEADER "${static_headers};${CMAKE_CURRENT_BINARY_DIR}/config.h"
+)
+
 ################################################################
 # Installation
 
 # libabmove.a
 install(TARGETS abmove
-	ARCHIVE DESTINATION lib
-)
-# static header files
-install(FILES ${static_headers}
-	DESTINATION include
-)
-# generated header file
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
-	DESTINATION include
+    EXPORT abmoveTargets
+    ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
+    PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
 )
