@@ -1,4 +1,4 @@
-[ ] Write README.txt which outlines the structure of the library
+[x] Write README.txt which outlines the structure of the library
 	what is the purpose of the library
 	which classes are defined
 	which headers are provided
