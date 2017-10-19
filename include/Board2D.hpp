@@ -93,7 +93,7 @@ HALIOTIS_EXPORT extern BoardGrid TheWall;
 class HALIOTIS_EXPORT Board2D {
   public:
     const static int PLAYERS = 2;
-    class Pos;
+    struct Pos;
     class Move;
     void InitFieldKey();
     /// @deprecated
@@ -317,7 +317,7 @@ public:
 #ifdef USE_GAME_CLASS
 struct GameTreeNode;
 
-struct HALIOTIS_EXPORT Game {
+class HALIOTIS_EXPORT Game {
 public:
   const Board2D& board; //< Current board, as seen after move done by currentPosition
   Settings attributes;

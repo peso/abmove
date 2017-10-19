@@ -28,10 +28,10 @@
 //
 
 inline void Assign(std::string& var, const std::string& val) { var = val; }
-inline void Assign(bool& var,   const std::string& val) { var = atoi(val.c_str()); }
+inline void Assign(bool& var,   const std::string& val) { var = atoi(val.c_str())!=0; }
 inline void Assign(int& var,    const std::string& val) { var = atoi(val.c_str()); }
 inline void Assign(long& var,   const std::string& val) { var = atol(val.c_str()); }
-inline void Assign(float& var,  const std::string& val) { var = atof(val.c_str()); }
+inline void Assign(float& var,  const std::string& val) { var = (float)atof(val.c_str()); }
 inline void Assign(double& var, const std::string& val) { var = atof(val.c_str()); }
 
 /**

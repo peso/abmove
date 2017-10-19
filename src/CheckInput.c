@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#if defined(__WINDOWS__) || defined(WINNT)
+#if defined(__WINDOWS__) || defined(WINNT) || defined(_WIN32)
 #define NT_i386
 #endif
 

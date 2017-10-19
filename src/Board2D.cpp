@@ -1145,7 +1145,7 @@ void Board::ExtendTail(Move& M) const
 //
 // GameTreeNode
 
-class GameTreeNode;
+struct GameTreeNode;
 
 /** Navigate through nodes in a game tree.
   @see GameTreeNode */
@@ -1826,13 +1826,13 @@ bool Game::WhiteMovesFirst() const
 */
 string Game::GetComment() const
 {
-  TRACE_ASSERT(currentPosition);
+  TRACE_ASSERT(currentPosition!=0);
   return currentPosition->comment;
 }
 
 void Game::SetComment(const string& comment)
 {
-  TRACE_ASSERT(currentPosition);
+  TRACE_ASSERT(currentPosition!=0);
   currentPosition->comment = comment;
 }
 
