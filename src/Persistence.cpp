@@ -594,10 +594,11 @@ bool expectMoveNumber(istream& in, int move_nr) {
 
 // Convert Abalone standard coordinate to BoardPos=Board2D::Pos
 // @note row must be a lower-case letter
-void parse_ab_pos(char row, char col, Board2D::Pos& bp) {
-  TRACE_ASSERT('a'<=row and row<='i' and '1'<=col and col<='9');
+bool parse_ab_pos(char row, char col, Board2D::Pos& bp) {
+  if (not ('a'<=row and row<='i' and '1'<=col and col<='9')) return false;
   bp.y = 'i'-row;
   bp.x = col - '1';
+  return true;
 }
 
 /** convert a FFTL move to Board2D::Move.
@@ -910,8 +911,8 @@ static string fftl(const Move& move) {
 bool parse_fftl(const string& str, const Board2D& board, Move& move) {
   if (str.length() != 4) return false;
   Board2D::Pos ff,tl;
-  parse_ab_pos(str[0],str[1],ff);
-  parse_ab_pos(str[2],str[3],tl);
+  if (not parse_ab_pos(str[0],str[1],ff)) return false;
+  if (not parse_ab_pos(str[2],str[3],tl)) return false;
   if (not convert_ab_move(board,ff,tl, move)) return false;
   return true;
 }
