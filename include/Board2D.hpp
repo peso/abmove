@@ -10,7 +10,6 @@
 #include <iso646.h>
 
 //#include "config.h"
-#define USE_GAME_CLASS
 
 #include <string>
 #include <iostream>
@@ -163,13 +162,6 @@ HALIOTIS_EXPORT ostream& operator << (ostream& out, const Board2D::Move& m);
 /** Print a Nacre Board on a stream, using the Nacre notation. */
 HALIOTIS_EXPORT ostream& operator << (ostream& out, const Board2D& board);
 
-#ifdef USE_GAME_CLASS
-class Game;
-
-/** Print a Nacre Game on a stream, using the Nacre notation. */
-HALIOTIS_EXPORT ostream& operator << (ostream& out, const Game& game);
-#endif
-
 /////////////////////////////////////////////////////////////////////
 
 /** A position on the board. Since the board is 9x9 it is possible
@@ -314,53 +306,6 @@ public:
   virtual void DoMove(const Board2D::Move& m) =0;
 };
 
-#ifdef USE_GAME_CLASS
-struct GameTreeNode;
-
-class HALIOTIS_EXPORT Game {
-public:
-  const Board2D& board; //< Current board, as seen after move done by currentPosition
-  Settings attributes;
-private:
-  Board2D startPos;
-  Board2D currentBoard; //< Current board, as seen after move done by currentPosition
-  GameTreeNode* moveTree;
-  GameTreeNode* currentPosition;
-public:
-  Game();
-  Game(const Game& g);
-  Game(Board2D aBoard);
-  ~Game();
-  const Game& operator = (const Game&);
-  void RestartFrom(Board2D aBoard);
-  void Read(istream& in);
-  void Write(ostream& out) const;
-  int DoMove(Board2D::Move M);
-  int RedoMove(Board2D::Move M);
-  void UndoMove();
-  void UndoAllMoves();
-  /// Redo main line move
-  void RedoMove();
-  /// From current position, have we reached the end of the primary variation?
-  bool MoreMovesToUndo() const;
-  /// Are we at the root
-  bool MoreMovesToRedo() const;
-  Board2D::Move PrevMove() const;
-  Board2D::Move NextMove() const;
-  std::vector<Board2D::Move> AlternateMoves() const;
-  const Board2D& CurrentBoard() const { return board; }
-  int CurrentBoardNumber() const;
-  std::vector<Board2D::Move> CurrentMoves() const;
-  bool BoardAlreadySeen(const Board2D& aBoard) const;
-  /// @deprecated Does not make sense for a tree representation
-  int Length() const;
-  /// @deprecated
-  bool WhiteMovesFirst() const;
-  std::string GetComment() const;
-  void SetComment(const std::string& comment);
-  const Board2D& StartPos() const { return startPos; }
-};
-#endif
 /////////////////////////////////////////////////////////////////////////
 
 /** ReverseMove generates reverse moves. The board before each generated
@@ -406,6 +351,7 @@ typedef Haliotis::Board2D Board;
 typedef Haliotis::Board2D::Move Move;
 typedef Haliotis::Board2D::Move BoardMove;
 typedef Haliotis::Board2D::Pos BoardPos;
+#include "Game.hpp"
 
 #endif
 

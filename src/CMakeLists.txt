@@ -24,6 +24,7 @@ set(static_headers
     ../include/AEPWrap.hpp
     ../include/Board2D.hpp
     ../include/CheckInput.h
+    ../include/Game.hpp
     ../include/Persistence.hpp
     ../include/Settings.hpp
     ../include/TraceFlag.hpp
