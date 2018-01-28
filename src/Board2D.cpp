@@ -1320,7 +1320,8 @@ void GameTreeNode::RemoveNode(GameTreeNode*& nodePtr)
   delete p;
 }
 
-#if 0
+#define HIDE_GameTreeNode_Read
+#ifndef HIDE_GameTreeNode_Read
 class GameParser {
   istream& m_in;
   string m_cur_tok;
@@ -1380,9 +1381,10 @@ void GameTreeNode_Read(GameTreeNode*& node, GameParser& p)
 
 void GameTreeNode_Read(GameTreeNode*& node, istream& in)
 {
+  #ifdef HIDE_GameTreeNode_Read
   bool GameTreeNode_Read_implemented = false;
   TRACE_ASSERT(GameTreeNode_Read_implemented);
-  #if 0
+  #else
   GameParser parser(in);
   GameTreeNode_Read(node,parser);
   #endif
