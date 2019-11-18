@@ -36,6 +36,7 @@ set(module_files
     AEPWrap.cpp
     Board2D.cpp
     CheckInput.c
+    Game.cpp
     Persistence.cpp
     Settings.cpp
     Trace.cpp
