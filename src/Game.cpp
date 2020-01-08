@@ -45,6 +45,8 @@ using std::vector;
 using std::stringstream;
 #endif
 
+#include "Persistence.hpp"
+
 //// implementation ////////////////////////////////////////////
 
 namespace Haliotis {
@@ -804,7 +806,7 @@ void Game::SetComment(const string& comment)
   currentPosition->comment = comment;
 }
 
-#if 1
+#if 0
 // TODO: Move this code to Persistence.cpp
 void SkipWhiteSpace(istream& in)
 {

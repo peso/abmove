@@ -74,5 +74,7 @@ bool parse_fftl(const std::string&  str,
   const Haliotis::Board2D&        board,
   Haliotis::Board2D::Move&         move);
 bool readMove(std::istream& in, Haliotis::Game& game);
+void ReadAttributes(Settings& att, istream& in);
+void WriteAttributes(const Settings& att, ostream& out);
 
 #endif
