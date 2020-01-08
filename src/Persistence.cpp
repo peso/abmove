@@ -446,18 +446,6 @@ void ag_format::Write(std::ostream& out) const {
 #endif
 
 
-#if 0
-namespace Haliotis {
-// TODO: Move this function from Board.cpp to this file
-// TODO: Delete all stream-related code from Board.cpp (at least
-// with respect to Game and GameTree)
-void ReadAttributes(Settings& att, istream& in);
-void WriteAttributes(const Settings& att, ostream& out);
-
-// Located in Board.cpp
-void SkipWhiteSpace(istream& in);
-}
-#else
 
 void SkipWhiteSpace(istream& in)
 {
@@ -575,7 +563,6 @@ void WriteAttributes(const Settings& att, ostream& out)
   // Print blank line (if any attributes were printed)
   if (att.size() > 0) out << endl;
 }
-#endif
 
 bool expectMoveNumber(istream& in, int move_nr) {
   // TODO: Add validation of input
