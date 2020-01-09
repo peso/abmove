@@ -684,19 +684,36 @@ bool convert_ab_move(
 
 /** Do one FFTL move on a game. */
 bool doFFTL(Game& game,  char fa, char f1, char ta, char t1) {
-  if (fa<'a' or 'i'<fa) return false; // Parse error
-  if (f1<'1' or '9'<f1) return false; // Parse error
-  if (ta<'a' or 'i'<ta) return false; // Parse error
-  if (t1<'1' or '9'<t1) return false; // Parse error
+  if (fa<'a' or 'i'<fa
+  or  f1<'1' or '9'<f1
+  or  ta<'a' or 'i'<ta
+  or  t1<'1' or '9'<t1) {
+    TRACE("Move did not match template x0x0");
+    return false; // Parse error
+  }
   Board2D::Pos from_first;
   parse_ab_pos(fa,f1,from_first);
-  if (not from_first.Valid()) return false; // Invalid move
+  if (not from_first.Valid()) {
+    TRACE("From-first '"<<fa<<f1<<"' not valid");
+    return false; // Invalid move
+  }
   Board2D::Pos to_last;
   parse_ab_pos(ta,t1,to_last);
-  if (not to_last.Valid()) return false; // Invalid move
+  if (not to_last.Valid()) {
+    TRACE("To-last '"<<ta<<t1<<"' not valid");
+    return false; // Invalid move
+  }
   Board2D::Move move;
-  if (not convert_ab_move(game.board,from_first,to_last,move)) return false;
-  if (game.DoMove(move) != 0) return false; // Invalid move
+  if (not convert_ab_move(game.board,from_first,to_last,move)) {
+    TRACE("convert_ab_move failed");
+    return false;
+  }
+  TRACE1("game board \n"<<game.CurrentBoard());
+  TRACE1("Do move "<<move);
+  if (game.DoMove(move) != 0) {
+    TRACE("DoMove failed");
+    return false; // Invalid move
+  }
   return true;
 }
 
@@ -709,18 +726,45 @@ public:
   string cur_tok() const { return m_cur_tok; };
   void next_tok(string delim = " \t\n\v\f\r") {
     char c;
+    if (delim == "}") { // Extract comment content
+      TRACE1("Extract comment content");
+      m_cur_tok = "";
+      while (!eof()) {
+        c = (char)m_in.get();
+        if (c == '}') {
+          TRACE1("Comment=\""<<m_cur_tok<<"\"");
+          return;
+        }
+        m_cur_tok += c;
+      }
+      TRACE("Comment=\""<<m_cur_tok<<"\" -- WARNING: Reached EOF without '}'");
+      return;
+    }
     // skip whitespace
+    TRACE1("Skipping '"<<delim<<"'");
     do {
       c = (char)m_in.get();
-      if (!m_in.good()) return;
-    } while (delim.find(c));
+      if (!m_in.good()) {
+        TRACE1("Skipped whitespace up to end of file");
+        return;
+      }
+      TRACE1("char '"<<c<<"' "<<(delim.find(c)!=string::npos?"skip":"keep"));
+    } while (delim.find(c) != string::npos);
     // read more if alpha-num
     m_cur_tok = c;
-    while (!isalnum(m_in.peek())) {
-      m_cur_tok += (char)m_in.get();
-      if (!m_in.good()) return;
+    if (c == '{') {
+      TRACE1("Next token is comment content");
+      return; // Next token is comment content
     }
-    m_in.putback(c);
+    while (isalnum(m_in.peek())) {
+      m_cur_tok += (char)m_in.get();
+      TRACE1("On more alphanum - "<<m_cur_tok);
+      if (!m_in.good()) {
+        TRACE1("Read token up to end of file");
+        return;
+      }
+    }
+    TRACE1("No more alpha-num chars");
   }
 };
 
@@ -734,15 +778,17 @@ void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
   // next token: next_tok, cur_tok
   if (p.eof()) return;
   if (p.cur_tok() == ")") return;
-  TRACE_ASSERT(parseMove(p.cur_tok(),game));
+  bool move_ok = parseMove(p.cur_tok(),game);
+  if (not move_ok) {
+    TRACE("Expected move but got \""<<p.cur_tok()<<"\"")
+    TRACE_ASSERT(move_ok);
+  }
   p.next_tok();
   if (p.cur_tok() == "{") { // TODO handle comments
     // Read comment
-    p.next_tok("}");
+    p.next_tok("}"); // will read comment content
     game.SetComment(p.cur_tok());
-    p.next_tok();
-    TRACE_ASSERT(p.cur_tok()=="}");
-    p.next_tok();
+    p.next_tok(); // get next token
   }
   if (p.cur_tok() == "(") {
     // Read variation
@@ -760,16 +806,6 @@ void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
   game.UndoMove();
 }
 
-/** Read one FFTL move from stream and add to game. */
-bool readMove(istream& in, Game& game) {
-  if (not in) return false;
-  SkipWhiteSpace(in);
-  char fa,f1,ta,t1;
-  in >> fa >> f1 >> ta >> t1;
-  if (not in) return false; // EOF
-  return doFFTL(game,fa,f1,ta,t1);
-}
-
 void AbaloneGameFormat_Read(istream& in, Game& game) {
   Settings attributes;
   ReadAttributes(attributes,in);
@@ -780,13 +816,9 @@ void AbaloneGameFormat_Read(istream& in, Game& game) {
 
   game.attributes = attributes;
 
-  int move_nr = 0;
-  while (in) {
-    Board2D::Move move;
-    if (!expectMoveNumber(in,++move_nr)) break;
-    if (!readMove(in,game)) break;
-    if (!readMove(in,game)) break;
-  }
+  GameParser parser(in);
+  parser.next_tok(); // get first token
+  AbaloneGameFormat_ReadGameTree(game, parser);
   // Rewind game to start
   game.UndoAllMoves();
 }
