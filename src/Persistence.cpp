@@ -736,7 +736,7 @@ void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
   if (p.cur_tok() == ")") return;
   TRACE_ASSERT(parseMove(p.cur_tok(),game));
   p.next_tok();
-  if (p.cur_tok() == "{") {
+  if (p.cur_tok() == "{") { // TODO handle comments
     // Read comment
     p.next_tok("}");
     game.SetComment(p.cur_tok());
@@ -791,16 +791,155 @@ void AbaloneGameFormat_Read(istream& in, Game& game) {
   game.UndoAllMoves();
 }
 
+void WriteMoveNumber(ostream& out, int ply, bool& show_move) {
+  if (!show_move) return;
+  int next_round = ply / 2 + 1;
+  out << next_round << ".";
+  if (ply % 2 == 1) {
+    out << " - ";
+  }
+  show_move = false;
+}
+
+void WriteMove(ostream& out, Move move) {
+  out << move;
+}
+
+/** Write the rest of the game tree to the stream.
+  @param out  Stream to write to
+  @param game  Game to write. All moves from the current board are written, including their followers.
+  @param ply  Number of moves printed so far.
+  @param show_move
+*/
+void AbaloneGameFormat_WriteGameTree(ostream& out, Game game, int ply=0, bool show_move=true) {
+  if (! game.MoreMovesToRedo()) return;
+  while (game.MoreMovesToRedo()) {
+    if (ply % 2 == 0) show_move = true;
+    WriteMoveNumber(out, ply, show_move);
+    WriteMove(out, game.NextMove());
+    std::string comment = game.GetComment();
+    if (comment != "") {
+      out << " {" << comment << "}";
+    }
+    auto altMoves = game.AlternateMoves();
+    for (auto i = altMoves.begin(); i != altMoves.end(); i ++)
+    {
+      out << " (";
+      show_move = true;
+      WriteMoveNumber(out, ply, show_move);
+      WriteMove(out, *i);
+      game.RedoMove(*i);
+      ply ++;
+      if (ply % 2 == 0) show_move = true;
+      AbaloneGameFormat_WriteGameTree(out, game, ply, show_move);
+      ply --;
+      game.UndoMove();
+      out << ")";
+    }
+    game.RedoMove();
+    ply ++;
+  }
+}
+
+#ifdef HAVE_CPPUNIT
+
+class GameTreeNodeTest : public CppUnit::TestCase {
+public:
+  CPPUNIT_TEST_SUITE( GameTreeNodeTest );
+    CPPUNIT_TEST( testWrite_empty );
+    CPPUNIT_TEST( testWrite_noBranch );
+    CPPUNIT_TEST( testWrite_branches );
+  CPPUNIT_TEST_SUITE_END();
+
+  void testWrite_empty() {
+    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
+    GameTreeNode* root = 0;
+    Board2D board;
+    Board2D::Move m;
+
+    { // test empty game
+    TRACE("test empty game");
+    stringstream out;
+    GameTreeNode_Write(root,out);
+    string expectedResult = "";
+    TRACE( out.str() << " ?== " << expectedResult);
+    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
+    }
+
+    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
+  }
+  void testWrite_noBranch() {
+    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
+    GameTreeNode* root = 0;
+    Board2D board;
+    Board2D::Move m;
+
+    { // test game without branches
+    TRACE("test game without branches");
+    board.SetUp(BelgianDaisy);
+    GameTreeNode** n = &root;
+    for (int i=0; i<3; i++) {
+      board.FirstMove(m);
+      board.DoMove(m);
+      *n = new GameTreeNode();
+      (*n)->move = m;
+      n = &((*n)->next);
+    }
+    stringstream out;
+    GameTreeNode_Write(root,out);
+    string expectedResult = "1.a3a3 b3b4 2.a2a3";
+    TRACE( out.str() << " ?== " << expectedResult);
+    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
+    }
+
+    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
+  }
+  void testWrite_branches() {
+    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
+    GameTreeNode* root = 0;
+    Board2D board;
+    Board2D::Move m;
+
+    { // test game with multiple branches
+    TRACE("test game with multiple branches");
+    board.SetUp(BelgianDaisy);
+    GameTreeNode** n = &root;
+    for (int i=0; i<3; i++) {
+      board.FirstMove(m);
+      // Add primary move
+      *n = new GameTreeNode();
+      (*n)->move = m;
+
+      // Add alternate move
+      Move m2 = m;
+      board.NextMove(m2);
+      (*n)->alt = new GameTreeNode();
+      (*n)->alt->move = m2;
+
+      // Next board along primary move
+      board.DoMove(m);
+      n = &((*n)->next);
+    }
+    stringstream out;
+    GameTreeNode_Write(root,out);
+    string expectedResult = "1.a3a3 b3b4 2.a2a3";
+    TRACE( out.str() << " ?== " << expectedResult);
+    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
+    }
+
+    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
+  }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION( GameTreeNodeTest );
+
+#endif
+
 void AbaloneGameFormat_Write(ostream& out, const Game& const_game) {
   WriteAttributes(const_game.attributes,out);
   const_game.board.Write(out);
   Game game(const_game);
-  // TODO: This is only for sequental games
   game.UndoAllMoves();
-  while (game.MoreMovesToRedo()) {
-    game.NextMove().Write(out);
-    game.RedoMove();
-  }
+  AbaloneGameFormat_WriteGameTree(out, game);
   out << endl; // extra newline to mark end of game
 }
 

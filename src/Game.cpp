@@ -288,197 +288,6 @@ void GameTreeNode::RemoveNode(GameTreeNode*& nodePtr)
   delete p;
 }
 
-#define HIDE_GameTreeNode_Read
-#ifndef HIDE_GameTreeNode_Read
-class GameParser {
-  istream& m_in;
-  string m_cur_tok;
-public:
-  GameParser(istream& in): m_in(in) {}
-  bool eof() const { return !m_in.good(); }
-  string cur_tok() const { return m_cur_tok; };
-  void next_tok(string delim = " \t\n\v\f\r") {
-    char c;
-    // skip whitespace
-    do {
-      c = (char)m_in.get();
-      if (!m_in.good()) return;
-    } while (delim.find(c));
-    // read more if alpha-num
-    m_cur_tok = c;
-    while (!isalnum(m_in.peek())) {
-      m_cur_tok += (char)m_in.get();
-      if (!m_in.good()) return;
-    }
-    m_in.putback(c);
-  }
-};
-
-bool is_move(const string& str) {
-  if (str.length() != 4) return false;
-  return true;
-}
-
-void GameTreeNode_Read(GameTreeNode*& node, GameParser& p)
-{
-  // next token: next_tok, cur_tok
-  if (p.eof()) return;
-  if (p.cur_tok() == ")") return;
-  TRACE_ASSERT(is_move(p.cur_tok()));
-  node->move = parser_move(p.cur_tok());
-  p.next_tok();
-  if (p.cur_tok() == "{") {
-    // Read comment
-    p.next_tok('}');
-    node->comment = p.cur_tok();
-    p.next_tok();
-    TRACE_ASSERT(p.cur_tok()=="}");
-    p.next_tok();
-  }
-  if (p.cur_tok() == "(") {
-    // Read variation
-    p.next_tok();
-    GameTreeNode_Read(node->alt,p);
-    TRACE_ASSERT(p.cur_tok()==")");
-    p.next_tok();
-  }
-  // Parse remainder
-  GameTreeNode_Read(node->next,p);
-}
-#endif
-
-void GameTreeNode_Read(GameTreeNode*& node, istream& in)
-{
-  #ifdef HIDE_GameTreeNode_Read
-  bool GameTreeNode_Read_implemented = false;
-  TRACE_ASSERT(GameTreeNode_Read_implemented);
-  #else
-  GameParser parser(in);
-  GameTreeNode_Read(node,parser);
-  #endif
-}
-
-// TODO: Add move numbers
-void GameTreeNode_Write(const GameTreeNode* node, ostream& out)
-{
-  if (node == 0) return;
-  out << node->move;
-  if (not node->comment.empty()) out << " {" << node->comment << "}";
-  // Write all variations before continuing main line
-  for (const GameTreeNode* n = node->alt; n != 0; n = n->alt) {
-    Move move = n->move;
-    out << " (" << move;
-    if (not n->comment.empty()) out << " {" << n->comment << "}";
-    if (n->next) { out << " "; GameTreeNode_Write(n->next, out); }
-    out << ")";
-  }
-  // Continue main line
-  if (node->next) {
-    out << " ";
-    GameTreeNode_Write(node->next, out);
-  }
-}
-
-ostream& operator << (ostream& out, GameTreeNode* node) {
-  out << "[";
-  GameTreeNode_Write(node,out);
-  out << "]";
-  return out;
-}
-
-#ifdef HAVE_CPPUNIT
-
-class GameTreeNodeTest : public CppUnit::TestCase {
-public:
-  CPPUNIT_TEST_SUITE( GameTreeNodeTest );
-    CPPUNIT_TEST( testWrite_empty );
-    CPPUNIT_TEST( testWrite_noBranch );
-    CPPUNIT_TEST( testWrite_branches );
-  CPPUNIT_TEST_SUITE_END();
-
-  void testWrite_empty() {
-    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
-    GameTreeNode* root = 0;
-    Board2D board;
-    Board2D::Move m;
-
-    { // test empty game
-    TRACE("test empty game");
-    stringstream out;
-    GameTreeNode_Write(root,out);
-    string expectedResult = "";
-    TRACE( out.str() << " ?== " << expectedResult);
-    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
-    }
-
-    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
-  }
-  void testWrite_noBranch() {
-    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
-    GameTreeNode* root = 0;
-    Board2D board;
-    Board2D::Move m;
-
-    { // test game without branches
-    TRACE("test game without branches");
-    board.SetUp(BelgianDaisy);
-    GameTreeNode** n = &root;
-    for (int i=0; i<3; i++) {
-      board.FirstMove(m);
-      board.DoMove(m);
-      *n = new GameTreeNode();
-      (*n)->move = m;
-      n = &((*n)->next);
-    }
-    stringstream out;
-    GameTreeNode_Write(root,out);
-    string expectedResult = "1.a3a3 b3b4 2.a2a3";
-    TRACE( out.str() << " ?== " << expectedResult);
-    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
-    }
-
-    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
-  }
-  void testWrite_branches() {
-    TRACE(__FILE__ " +GameTreeNodeTest::" << __func__);
-    GameTreeNode* root = 0;
-    Board2D board;
-    Board2D::Move m;
-
-    { // test game with multiple branches
-    TRACE("test game with multiple branches");
-    board.SetUp(BelgianDaisy);
-    GameTreeNode** n = &root;
-    for (int i=0; i<3; i++) {
-      board.FirstMove(m);
-      // Add primary move
-      *n = new GameTreeNode();
-      (*n)->move = m;
-
-      // Add alternate move
-      Move m2 = m;
-      board.NextMove(m2);
-      (*n)->alt = new GameTreeNode();
-      (*n)->alt->move = m2;
-
-      // Next board along primary move
-      board.DoMove(m);
-      n = &((*n)->next);
-    }
-    stringstream out;
-    GameTreeNode_Write(root,out);
-    string expectedResult = "1.a3a3 b3b4 2.a2a3";
-    TRACE( out.str() << " ?== " << expectedResult);
-    CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
-    }
-
-    TRACE(__FILE__ " -GameTreeNodeTest::" << __func__);
-  }
-};
-CPPUNIT_TEST_SUITE_REGISTRATION( GameTreeNodeTest );
-
-#endif
-
 
 /*---- Game ----------------------------------------------------*/
 
@@ -811,13 +620,7 @@ void Game::SetComment(const string& comment)
 */
 void Game::Read(istream& in)
 {
-  attributes.clear();
-  ReadAttributes(attributes,in);
-
-  startPos.Read(in);
-  GameTreeNode_Read(moveTree,in);
-  // Move current move to beginning, and copy startPos to current board
-  UndoAllMoves();
+  AbaloneGameFormat_Read(in, *this);
 }
 
 /**
@@ -825,10 +628,7 @@ void Game::Read(istream& in)
 */
 void Game::Write(ostream& out) const
 {
-  WriteAttributes(attributes,out);
-  startPos.Write(out);
-  GameTreeNode_Write(moveTree,out);
-  out << endl;
+  AbaloneGameFormat_Write(out, *this);
 }
 
 } // namespace Haliotis

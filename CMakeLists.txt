@@ -1,4 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
+set (CMAKE_CXX_STANDARD 11)
 
 # The name of our project is "abmove".  CMakeLists files in this project can
 # refer to the root source directory of the project as ${abmove_SOURCE_DIR} and
