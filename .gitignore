@@ -1,0 +1,10 @@
+CMakeCache.txt
+CMakeFiles
+*.cmake
+Makefile
+build
+*.log
+*.cbp
+*.txt.user
+_CPack_Packages
+abmove-*.deb
