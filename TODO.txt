@@ -11,3 +11,8 @@
 	install files, and compile example code
 	or other code that uses the library (e.g. paua)
 [ ] Provide cmake configuration file
+[ ] Release version 0.2
+[ ] Replace Trace module with spdlog
+[ ] Replace Settings module with inih
+[ ] Update README to reflect new modules
+[ ] Release version 0.3
