@@ -101,9 +101,9 @@ public:
   /// Set up board position and moves leading to it
   virtual void SetGame(const Game& game) =0;
   /// Get name of engine
-  virtual const char* GetName() const =0;
+  virtual std::string GetName() const =0;
   /// Get author of engine
-  virtual const char* GetAuthor() const =0;
+  virtual std::string GetAuthor() const =0;
   /// Control debug output
   virtual void SetDebug(bool enable) =0;
   /// Get move from engine (ask it do perform a search)

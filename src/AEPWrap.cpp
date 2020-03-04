@@ -195,11 +195,11 @@ public:
     TRACE("-HandleCommand : "<<original_commandLine);
   }
   void cmd_aep() {
-    const char* s;
+    string s;
     s = m_engine->GetName();
-    if (s) reply("id name "+string(s));
+    if (s!="") reply("id name "+s);
     s = m_engine->GetAuthor();
-    if (s) reply("id author "+string(s));
+    if (s!="") reply("id author "+s);
     // TODO: Return options of engine
     reply("readyok");
   }
