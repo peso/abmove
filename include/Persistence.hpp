@@ -8,13 +8,7 @@
 
 #include <iostream>
 
-#if 0
-namespace Haliotis {
-  class Game;
-}
-#else
-#include "Board2D.hpp"
-#endif
+#include "Game.hpp"
 
 #include "Settings.hpp"
 #ifndef __SETTINGS_HPP__

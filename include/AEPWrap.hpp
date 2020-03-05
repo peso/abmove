@@ -7,6 +7,7 @@
 #include <memory>
 #include <string>
 #include "Board2D.hpp"
+#include "Game.hpp"
 using namespace Haliotis;
 
 namespace AbaloneEngineProtocol {

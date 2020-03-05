@@ -351,7 +351,6 @@ typedef Haliotis::Board2D Board;
 typedef Haliotis::Board2D::Move Move;
 typedef Haliotis::Board2D::Move BoardMove;
 typedef Haliotis::Board2D::Pos BoardPos;
-#include "Game.hpp"
 
 #endif
 
