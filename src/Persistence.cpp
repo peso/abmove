@@ -806,6 +806,16 @@ void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
   game.UndoMove();
 }
 
+/** Read one FFTL move from stream and add to game. */
+bool readMove(istream& in, Game& game) {
+  if (not in) return false;
+  SkipWhiteSpace(in);
+  char fa,f1,ta,t1;
+  in >> fa >> f1 >> ta >> t1;
+  if (not in) return false; // EOF
+  return doFFTL(game,fa,f1,ta,t1);
+}
+
 void AbaloneGameFormat_Read(istream& in, Game& game) {
   Settings attributes;
   ReadAttributes(attributes,in);
