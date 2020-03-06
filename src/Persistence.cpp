@@ -564,21 +564,6 @@ void WriteAttributes(const Settings& att, ostream& out)
   if (att.size() > 0) out << endl;
 }
 
-bool expectMoveNumber(istream& in, int move_nr) {
-  // TODO: Add validation of input
-  if (not in) return false;
-  char c;
-  SkipWhiteSpace(in);
-  in >> c;
-  int move_nr_read = 0;
-  while (isdigit(c)) {
-    move_nr_read = move_nr_read * 10 + (c-'0');
-    in >> c;
-  }
-  in >> c; // skip trailing '.'
-  return move_nr_read == move_nr;
-}
-
 // Convert Abalone standard coordinate to BoardPos=Board2D::Pos
 // @note row must be a lower-case letter
 bool parse_ab_pos(char row, char col, Board2D::Pos& bp) {
@@ -764,6 +749,9 @@ public:
         return;
       }
     }
+    if ('0' <= m_cur_tok[0] and m_cur_tok[0] <= '9' and m_in.peek() == '.') {
+      m_in.get(); // Skip trailing '.'
+    }
     TRACE1("No more alpha-num chars");
   }
 };
@@ -773,11 +761,21 @@ bool parseMove(string s, Game& game) {
   return doFFTL(game,s[0],s[1],s[2],s[3]);
 }
 
+bool is_number(string s) {
+  for (int i=0; i<s.size(); i++)
+    if (s[i]<'0' or '9'<s[i]) return false;
+  return true;
+}
+
 void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
 {
   // next token: next_tok, cur_tok
   if (p.eof()) return;
   if (p.cur_tok() == ")") return;
+  if (is_number(p.cur_tok())) {
+    TRACE("Move nr "<<p.cur_tok());
+    p.next_tok();
+  }
   bool move_ok = parseMove(p.cur_tok(),game);
   if (not move_ok) {
     TRACE("Expected move but got \""<<p.cur_tok()<<"\"")
