@@ -980,7 +980,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( GameTreeNodeTest );
 
 void AbaloneGameFormat_Write(ostream& out, const Game& const_game) {
   WriteAttributes(const_game.attributes,out);
-  const_game.board.Write(out);
+  const_game.StartPos().Write(out);
   Game game(const_game);
   game.UndoAllMoves();
   AbaloneGameFormat_WriteGameTree(out, game);
