@@ -25,6 +25,7 @@ public:
   Settings attributes;
 private:
   Board2D startPos;
+  std::string startComment;
   Board2D currentBoard; //< Current board, as seen after move done by currentPosition
   GameTreeNode* moveTree;
   GameTreeNode* currentPosition;

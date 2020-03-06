@@ -606,14 +606,14 @@ bool Game::WhiteMovesFirst() const
 */
 string Game::GetComment() const
 {
-  TRACE_ASSERT(currentPosition!=0);
-  return currentPosition->comment;
+  if (currentPosition==0) return startComment;
+  else return currentPosition->comment;
 }
 
 void Game::SetComment(const string& comment)
 {
-  TRACE_ASSERT(currentPosition!=0);
-  currentPosition->comment = comment;
+  if (currentPosition==0) startComment = comment;
+  else currentPosition->comment = comment;
 }
 
 /**
