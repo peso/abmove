@@ -515,6 +515,7 @@ Move Game::PrevMove() const
 Move Game::NextMove() const
 {
   if (not MoreMovesToRedo()) return Move();
+  if (currentPosition == 0) return moveTree->move;
   return currentPosition->next->move;
 }
 
