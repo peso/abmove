@@ -864,8 +864,10 @@ void AbaloneGameFormat_WriteGameTree(ostream& out, Game game, int ply=0, bool sh
       out << " {" << comment << "}";
     }
     auto altMoves = game.AlternateMoves();
+    bool pv = true;
     for (auto i = altMoves.begin(); i != altMoves.end(); i ++)
     {
+      if (pv) { pv=false; continue; }
       out << " (";
       show_move = true;
       WriteMoveNumber(out, ply, show_move);
