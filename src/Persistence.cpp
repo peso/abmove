@@ -844,7 +844,7 @@ void WriteMoveNumber(ostream& out, int ply, bool& show_move) {
 }
 
 void WriteMove(ostream& out, Move move) {
-  out << move;
+  out << move << " ";
 }
 
 /** Write the rest of the game tree to the stream.
