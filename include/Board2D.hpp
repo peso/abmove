@@ -104,6 +104,7 @@ class HALIOTIS_EXPORT Board2D {
     bool MyPiece(int8 F) const;
     void SetUpStartPos();
     void SetUp(BoardGrid grid);
+    void SetUp(const Board2D& board);
     void Read(istream& in);
     void Write(ostream& out) const;
     void FirstMove(Move& M) const;

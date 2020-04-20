@@ -400,6 +400,18 @@ void Board::SetUp(BoardGrid grid)
   whiteToMove=true;
 }
 
+void Board::SetUp(const Board& board)
+{
+  // Note:
+  // field[0][0] = white off
+  // field[8][8] = black off
+  for (int x=0; x<=8; x++)
+    for (int y=0; y<=8; y++)
+      field[x][y]=board.field[x][y];
+  currentHashCode=board.currentHashCode;
+  whiteToMove=board.whiteToMove;
+}
+
 BoardGrid GermanDaisy = {
   {0, 0, 0, 0,   0, 0, 0, 0, 0},
    {0, 0, 0,   2, 2, 0, 0, 1, 1},
