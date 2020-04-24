@@ -12,20 +12,43 @@
 [ ] verify that it works
 	install files, and compile example code
 	or other code that uses the library (e.g. paua)
-[ ] Provide cmake configuration file
+[x] Provide cmake configuration file
+[x] Replace char* with std::string
 [ ] Release version 0.2
 
 # Function: Game load/save
 # Architecture: Replace home-made stuff with de-facto libraries
 [ ] Replace Trace module with spdlog
 [ ] Replace Settings module with inih
+[ ] Include spec for AbaloneEngineProtocol command line protocol
+[ ] Include spec for AbaloneGame file format
+[ ] Implement load and save of linear game in .AG format
 [ ] Update README to reflect new modules
 [ ] Release version 0.3
 
 # Function: Game import/export
 # Architecture: Support AbaPro, C++ cleanup (google coding standard)
+[ ] Replace CppUnit dependency with Google Test
+[ ] Format code to align more with Google C++ coding standard
+	[ ] Document coding standard
+	[ ] Consistent Indentation
+	[ ] using namespace everywhere
+	[ ] using folder in includes
+	[ ] avoid using char*
+[ ] Implement load and save of tree game in .AG format
+	[ ] Support AGF comments
+	[ ] write tests
+[ ] Implement load and save of game in AbaPro format
+	[ ] write tests
+[ ] Extract GamePos iterator class from Game
+	[ ] Provide range for main line
+	[ ] Provide infix iterator that can be used for AbaPro
+[ ] Provide C++11 range iterator Board::AllMoves
+[ ] Update README to reflect new dependencies
 [ ] Release version 0.4
 
 # Function: AEP options
 # Architecture: ? clean up TODO comments in code
+[ ] Implement options feature in AEP
+: more
 [ ] Release version 0.5
