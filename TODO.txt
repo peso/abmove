@@ -1,3 +1,5 @@
+# Function: User guides
+# Architecture: CMake integration
 [x] Write README.txt which outlines the structure of the library
 	what is the purpose of the library
 	which classes are defined
@@ -12,7 +14,18 @@
 	or other code that uses the library (e.g. paua)
 [ ] Provide cmake configuration file
 [ ] Release version 0.2
+
+# Function: Game load/save
+# Architecture: Replace home-made stuff with de-facto libraries
 [ ] Replace Trace module with spdlog
 [ ] Replace Settings module with inih
 [ ] Update README to reflect new modules
 [ ] Release version 0.3
+
+# Function: Game import/export
+# Architecture: Support AbaPro, C++ cleanup (google coding standard)
+[ ] Release version 0.4
+
+# Function: AEP options
+# Architecture: ? clean up TODO comments in code
+[ ] Release version 0.5
