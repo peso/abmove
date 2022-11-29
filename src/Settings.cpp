@@ -32,12 +32,12 @@ using std::ostringstream;
 
 void InitFile::Section::GetConfiguration(Settings& settings) const
 {
-  for (unsigned j=0; j<lines.size(); j++) {
+  for (size_t j=0; j<lines.size(); j++) {
     // Extract those lines not beginning with '#' or ';', containing a '='
     const string& line = lines[j];
     if (line[0]=='#') continue;
     if (line[0]==';') continue;
-    unsigned sep = line.find('=');
+    size_t sep = line.find('=');
     if (sep!=string::npos) {
       settings[string(line,0,sep)] = string(line,sep+1);
     }
@@ -52,12 +52,12 @@ void InitFile::Section::SetConfiguration(const Settings& _settings)
   // Update existing lines
   //
   
-  for (unsigned j=0; j<lines.size(); j++) {
+  for (size_t j=0; j<lines.size(); j++) {
     // Skip lines beginning with '#' or ';', or not containing a '='
     string& line = lines[j];
     if (line[0]=='#') continue;
     if (line[0]==';') continue;
-    unsigned sep = line.find('=');
+    size_t sep = line.find('=');
     if (sep!=string::npos) {
       // Update the value part of the line, but only if
       // settings contains the corresponding key

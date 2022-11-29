@@ -133,7 +133,7 @@ inline bool operator >> (std::istream& in, Settings& conf) {
   std::string line;
   SETTINGS_TRACE("read lines");
   while (getline(in,line)) {
-    unsigned sep = line.find('=');
+    size_t sep = line.find('=');
     if (sep==string::npos) {
       SETTINGS_TRACE("Did not find '=' in line \""<<line<<"\"");
       return false;

@@ -475,9 +475,9 @@ int ReadAttribute(istream& in, string& key, string& value) {
   // Everything must be on the same line.
 
   // Find Key (= "tag name")
-  unsigned int i = 0;
+  size_t i = 0;
   if (line[i++] != '[') return 3; // parse error
-  unsigned int j = line.find_first_of(" \"",i);
+  size_t j = line.find_first_of(" \"",i);
   if (j==string::npos) return 3; // parse error
   key = line.substr(i,j-i);
   TRACE1("key ["<<i<<":"<<j<<"]="<<key);
@@ -488,7 +488,7 @@ int ReadAttribute(istream& in, string& key, string& value) {
 
   // Find Value (= "tag value")
   j++; // j is now first char of value
-  unsigned int k = j;
+  size_t k = j;
   do {
     k = line.find_first_of("\\\"",k); // find '"' or '\'
     if (k==string::npos) return 3; // parse error
