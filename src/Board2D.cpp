@@ -993,12 +993,12 @@ bool Board::FirstMove(Move& M, Board& B) const
 void Board::SuggestNextMove(Move& M) const
 {
   /* next moveDir (0..5) */
-  while ((M.moveDir<5)) {
+  while (M.moveDir<5) {
     M.moveDir=M.moveDir+1;
     // 1 piece can move any direction - this will also cause push-moves
     // to be generated (in which case we ought to extend the tail)
     // TODO: Extend tail for push-moves (not trivial to fit into algorithm)
-    if ((M.tailCount==1)) return;
+    if (M.tailCount==1) return;
     // Now we have more than 1 piece selected, thus it must be a broadside
     // move. These are never parallel with the tail
     if (not Parallel(M.moveDir,M.tailDir)) return;
