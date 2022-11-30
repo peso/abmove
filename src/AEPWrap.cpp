@@ -119,7 +119,7 @@ public:
   {}
 
   unsigned m_first;
-  // TODO: read up on strtok() for std::string or boost-someting
+  // TODO: read up on strtok() for std::string or boost-tokenizer
   string get_token() {
     // skip leading blanks
     unsigned i = m_first;
