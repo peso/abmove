@@ -20,7 +20,11 @@ of TRACE_FILE
 #include <sstream>
 
 // Provoke a segmentation fault - make the debugger stop here
+#ifndef SKIP__builtin_trap
+#define SEGV __builtin_trap();
+#else
 #define SEGV *(int *)0 = 0;
+#endif
 
 HALIOTIS_EXPORT std::string TimeStamp();
 
