@@ -838,7 +838,8 @@ void Board::SetScore(int8 player, int count) {
 Board Board::AfterMove(Move M) const
 {
   Board Result(*this);
-  TRACE_ASSERT_MSG(Result.DoMove(M)==0,
+  int DoMove_error = Result.DoMove(M);
+  TRACE_ASSERT_MSG( DoMove_error == 0,
     "Board::AfterMove - move invalid on this board");
   return Result;
 }
