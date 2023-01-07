@@ -3,7 +3,7 @@
   Defines used to control linking.
 
   Define HALIOTIS_BUILD_SHLIB to build abmove dll
-  Define HALIOTIS_BUILD_SHLIB to link abmove dll
+  Define HALIOTIS_USE_SHLIB to link abmove dll
   Define nothing to build and link libabmove.a
 */
 #ifndef ABMOVE_H
