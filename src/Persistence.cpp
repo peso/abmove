@@ -835,15 +835,15 @@ void AbaloneGameFormat_Read(istream& in, Game& game) {
 void WriteMoveNumber(ostream& out, int ply, bool& show_move) {
   if (!show_move) return;
   int next_round = ply / 2 + 1;
-  out << next_round << ".";
+  out << next_round << ". ";
   if (ply % 2 == 1) {
-    out << " - ";
+    out << "- ";
   }
   show_move = false;
 }
 
 void WriteMove(ostream& out, Move move) {
-  out << move << " ";
+  out << move;
 }
 
 /** Write the rest of the game tree to the stream.
@@ -853,8 +853,10 @@ void WriteMove(ostream& out, Move move) {
   @param show_move
 */
 void AbaloneGameFormat_WriteGameTree(ostream& out, Game game, int ply=0, bool show_move=true) {
-  if (! game.MoreMovesToRedo()) return;
+  bool first_move = true;
   while (game.MoreMovesToRedo()) {
+    if (!first_move) out << " ";
+    first_move = false;
     if (ply % 2 == 0) show_move = true;
     WriteMoveNumber(out, ply, show_move);
     WriteMove(out, game.NextMove());
@@ -930,7 +932,7 @@ public:
     }
     stringstream out;
     GameTreeNode_Write(root,out);
-    string expectedResult = "1.a3a3 b3b4 2.a2a3";
+    string expectedResult = "1. i8h8 i5i6 2. i9h9";
     TRACE( out.str() << " ?== " << expectedResult);
     CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
     }
@@ -965,7 +967,7 @@ public:
     }
     stringstream out;
     GameTreeNode_Write(root,out);
-    string expectedResult = "1.a3a3 b3b4 2.a2a3";
+    string expectedResult = "1. i8h8 (1. i8h7) i5i6 (1. - i5h5) 2. i9h9 (2. i9h8)";
     TRACE( out.str() << " ?== " << expectedResult);
     CPPUNIT_ASSERT_EQUAL( expectedResult , out.str() );
     }
