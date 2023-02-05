@@ -349,7 +349,8 @@ const Game& Game::operator = (const Game& orig) {
     for (vector<Board2D::Move>::iterator i
       = movePath.begin(); i != movePath.end(); i ++)
     {
-      TRACE_ASSERT_MSG(DoMove(*i) == 0, "move="<< *i << endl<<board);
+      int DoMove_error = DoMove(*i);
+      TRACE_ASSERT_MSG(DoMove_error == 0, "move="<< *i << endl<<board);
     }
   }
 
@@ -402,7 +403,8 @@ bool Game::BoardAlreadySeen(const Board& aBoard) const
     moveList.begin(); i != moveList.end(); i ++)
   {
     if (curBoard == aBoard) return true;
-    TRACE_ASSERT(curBoard.DoMove(*i)==0);
+    int DoMove_error = curBoard.DoMove(*i);
+    TRACE_ASSERT(DoMove_error==0);
   }
 
   TRACE_ASSERT_MSG(curBoard == board, "Game::BoardAlreadySeen\n"
@@ -546,7 +548,8 @@ void Game::RedoMove()
   else next = currentPosition->next;
   if (next == 0) return;
   currentPosition = next;
-  TRACE_ASSERT(currentBoard.DoMove(currentPosition->move)==0);
+  int DoMove_error = currentBoard.DoMove(currentPosition->move);
+  TRACE_ASSERT(DoMove_error==0);
   return;
 }
 
@@ -564,7 +567,8 @@ void Game::UndoMove()
     moveList.begin(); i != moveList.end(); i ++)
   {
     TRACE1(__func__<<endl<<board<<endl<<"DoMove "<<*i);
-    TRACE_ASSERT(currentBoard.DoMove(*i) == 0);
+    int DoMove_error = currentBoard.DoMove(*i);
+    TRACE_ASSERT(DoMove_error == 0);
   }
 }
 

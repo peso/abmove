@@ -797,7 +797,8 @@ void AbaloneGameFormat_ReadGameTree(Game& game, GameParser& p)
     AbaloneGameFormat_ReadGameTree(game,p);
     TRACE_ASSERT(p.cur_tok()==")");
     p.next_tok();
-    TRACE_ASSERT(game.DoMove(move)==0);
+    int DoMove_error = game.DoMove(move);
+    TRACE_ASSERT(DoMove_error==0);
   }
   // Parse remaining principal variation
   AbaloneGameFormat_ReadGameTree(game,p);
