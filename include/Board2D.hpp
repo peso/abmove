@@ -133,6 +133,8 @@ class HALIOTIS_EXPORT Board2D {
     long HashCode() const;
     int Compare(const Board2D& aBoard) const;
     bool operator == (const Board2D& aBoard) const;
+    bool operator != (const Board2D& aBoard) const { 
+      return !(*this == aBoard); };
     bool operator < (const Board2D& aBoard) const;
   private:
 
