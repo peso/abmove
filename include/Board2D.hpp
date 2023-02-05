@@ -340,7 +340,7 @@ private:
   int opponentCount; // Number of pieces pushed
   Board2D boardBefore;
 
-  // Try do do the present move and return an error code if things does not work
+  // Try to do the present move and return an error code if things does not work
   int Do();
   // Generate next move (which may be invalid)
   void SuggestNext();

@@ -743,7 +743,7 @@ public:
     }
     while (isalnum(m_in.peek())) {
       m_cur_tok += (char)m_in.get();
-      TRACE1("On more alphanum - "<<m_cur_tok);
+      TRACE1("One more alphanum - "<<m_cur_tok);
       if (!m_in.good()) {
         TRACE1("Read token up to end of file");
         return;
