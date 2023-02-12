@@ -95,7 +95,7 @@ class HALIOTIS_EXPORT Board2D {
     struct Pos;
     class Move;
     void InitFieldKey();
-    /// @deprecated
+    // TODO  replace with  int8 playerToMove (range 1..2)
     bool whiteToMove;
     // range: 0..2
     int8 field[9][9];
@@ -105,7 +105,9 @@ class HALIOTIS_EXPORT Board2D {
     void SetUpStartPos();
     void SetUp(BoardGrid grid);
     void SetUp(const Board2D& board);
+    /// @deprecated serialisation is handled by Persistence.cpp
     void Read(istream& in);
+    /// @deprecated serialisation is handled by Persistence.cpp
     void Write(ostream& out) const;
     void FirstMove(Move& M) const;
     bool FirstMove(Move& M, Board2D& B) const;
@@ -155,6 +157,8 @@ class HALIOTIS_EXPORT Board2D {
 inline void SetUp(Board2D& board, BoardGrid grid) {
   board.SetUp(grid);
 }
+
+// TODO: Move all serialisation code to Persistence.cpp
 
 /** Print a Nacre Board2D::Pos on a stream, using the Nacre notation. */
 HALIOTIS_EXPORT ostream& operator << (ostream& out, const Board2D::Pos& bp);
@@ -297,7 +301,9 @@ class HALIOTIS_EXPORT Board2D::Move {
 
     bool Valid() const; // is move inside board?
 
+    /// @deprecated serialisation is handled by Persistence.cpp
     void Read(istream& in);
+    /// @deprecated serialisation is handled by Persistence.cpp
     void Write(ostream& out) const;
 };
 

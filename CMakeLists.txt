@@ -1,12 +1,14 @@
-cmake_minimum_required (VERSION 2.6)
-set (CMAKE_CXX_STANDARD 11)
+cmake_minimum_required (VERSION 3.1)
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard to use")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # The name of our project is "abmove".  CMakeLists files in this project can
 # refer to the root source directory of the project as ${abmove_SOURCE_DIR} and
 # to the root binary directory of the project as ${abmove_BINARY_DIR}.
 project (abmove)
 set(abmove_MAJOR_VERSION 0)
-set(abmove_MINOR_VERSION 2a)
+set(abmove_MINOR_VERSION 2)
 set(abmove_VERSION "${abmove_MAJOR_VERSION}.${abmove_MINOR_VERSION}")
 
 # Define installation directories - used by CMakeLists.txt in subdirectory

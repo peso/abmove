@@ -7,14 +7,6 @@
 #include <map>
 #include <sstream>
 
-// Warning: Do not include config.h and Trace.hpp since this is a header file
-#if 0
-#include "config.h"
-// If you define DEB1 here, every file that includes this header file
-// will also define trace.
-#define DEB1
-#include "Trace.hpp"
-#endif
 // Make header file work even if "Trace.hpp" is not included
 #ifdef TRACE
 #define SETTINGS_TRACE(x) TRACE(x)

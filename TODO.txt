@@ -9,15 +9,14 @@
 [ ] Clean installation from headers that are not needed
 	[ ] try to get rid of config.h
 	[ ] replace pack.bat with cpack -G TGZ
-[ ] verify that it works
-	install files, and compile example code
-	or other code that uses the library (e.g. paua)
 [x] Provide cmake configuration file
 [x] Replace char* with std::string
-[ ] Release version 0.2
+[x] Release version 0.2
 
 # Function: Game load/save
 # Architecture: Replace home-made stuff with de-facto libraries
+[ ] Remove functions deprecated in previous release
+[ ] Deprecate old Move.Read - provide move_load in persistence.cpp
 [ ] Replace Trace module with spdlog
 [ ] Replace Settings module with inih
 [ ] Include spec for AbaloneEngineProtocol command line protocol

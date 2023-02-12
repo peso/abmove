@@ -21,7 +21,8 @@
 #include "config.h"
 //#define DEB1
 #include "Trace.hpp"
-#include <iso646.h>
+
+#include <ciso646>
 
 using std::string;
 using std::vector;
